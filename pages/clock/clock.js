@@ -64,6 +64,7 @@ Page({
     this.setData({
       progress_txt: settings.workTime,
       totalSeconds: settings.workTime * 60,
+      // 假设定时器周期是 1000 毫秒，定时器会在经过一个周期后才执行回调函数
     })
   },
   handleClick () {
@@ -108,6 +109,7 @@ Page({
 
   handleFinish () {
     const self = this;
+    clearInterval(this.data.countTimer);
     wx.showModal({
       title: '完成番茄',
       content: '您已经完成了一个番茄钟',
@@ -142,28 +144,41 @@ Page({
     context.draw()
   },
 
+  handleTextParse () {
+    let { totalSeconds, countSeconds } = this.data;
+    const seconds = totalSeconds - countSeconds;
+    let progress_txt = this.handleNumberParse(parseInt(seconds / 60)) + ' : ' + this.handleNumberParse(seconds % 60);
+    console.log(progress_txt)
+    this.setData({ progress_txt });
+  },
+
+  /**
+   * 绘制彩色圆环进度条
+   * 计算进度，完整的圆是 2 * Math.PI，那么当前进度就是：已经完成的倒计时 / 全部时间 * 2
+   */
+  handleComputedProgress () {
+    let { progress, totalSeconds, countSeconds } = this.data;
+    const step = countSeconds / totalSeconds * 2;
+    this.setData({
+      progress: Object.assign({}, progress, { eAngle: (step - 0.5) * Math.PI} ),
+      countSeconds: countSeconds + 1,
+    });
+    this.handleTextParse();
+    if(step !== 0) {
+      this.drawCircle(progress)
+    }
+  },
   handleStart () {
     this.setData({
       countSeconds: 0
     });
     this.updateSettings();
+    this.handleTextParse();
     // 开始倒计时 定时器每1000毫秒执行一次，计数器 countSeconds+1 ,耗时 totalSeconds 绘一圈
     let countTimer = setInterval(() => {
       let { totalSeconds, countSeconds } = this.data;
-      if (this.data.countSeconds <= totalSeconds) {
-        /**
-         * 绘制彩色圆环进度条
-         * 计算进度，完整的圆是 2 * Math.PI，那么当前进度就是：已经完成的倒计时 / 全部时间 * 2
-         */
-        const step = this.data.countSeconds / totalSeconds * 2;
-        const seconds = totalSeconds - countSeconds - 1;
-        let progress_txt = this.handleNumberParse(parseInt(seconds / 60)) + ' : ' + this.handleNumberParse(seconds % 60);
-        this.setData({
-          progress: Object.assign({}, this.data.progress, { eAngle: (step - 0.5) * Math.PI} ),
-          countSeconds: countSeconds + 1,
-          progress_txt,
-        });
-        this.drawCircle(this.data.progress)
+      if (countSeconds < totalSeconds) {
+        this.handleComputedProgress();
       } else {
         this.handleFinish();
       }
