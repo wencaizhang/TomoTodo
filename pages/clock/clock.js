@@ -1,14 +1,21 @@
 // pages/canvas/canvas.js
+//获取应用实例
+const app = getApp()
 
 Page({
   data: {
     // 控制progress
-    count: 0, // 设置 计数器 初始为0
-    countTimer: null, // 设置 定时器
     progress_txt: '倒计时开始', // 提示文字
-    totalSeconds: 60,
-    // totalSeconds: 25 * 60,
+    totalSeconds: 0,  // 倒计时的总共时长（秒）
+    countSeconds: 0, // 设置 计数器 初始为0
 
+    countTimer: 0, // 定时器
+    isStart: false,
+    settings: {
+      workTime: 25,
+      restTime: 5,
+      ringing: true,
+    },
     circle: {
       el: 'canvasProgressbg',
       width: 7,  // 圆环的宽度
@@ -30,15 +37,80 @@ Page({
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad (options) {
+  onLoad () {
+    this.updateSettings();
+    this.initTime();
     const { circle, progress } = this.data;
     this.setData({
       progress: Object.assign({}, circle, progress)
     })
     this.drawCircle(circle);  //绘制背景
-    this.startProgress();  //开始progress
   },
 
+  updateSettings () {
+    const settings = app.globalData.settings
+    this.setData({ ...settings })
+  },
+  initTime () {
+    const settings = this.data.settings;
+    this.setData({
+      progress_txt: settings.workTime,
+      totalSeconds: settings.workTime * 60,
+    })
+  },
+  handleClick () {
+    const self = this;
+    let isStart = this.data.isStart;
+
+    if (isStart) {
+      wx.showModal({
+        title: '放弃番茄',
+        content: '您目前正在一个番茄工作时间中，要放弃这个番茄吗？',
+        success(res) {
+          if (res.confirm) {
+            self.handleStop();
+            self.setData({
+              isStart: !isStart,
+            })
+          } else if (res.cancel) {
+            console.log('用户点击取消')
+          }
+        }
+      })
+    } else {
+      this.handleStart();
+      this.setData({
+        isStart: !isStart,
+      })
+    }
+
+
+  },
+  handleStop () {
+    let countTimer = this.data.countTimer;
+    clearInterval(countTimer);
+    this.initTime();
+  },
+  handleNumberParse (n) {
+    if (n < 10) {
+      return '0' + n;
+    }
+    return n;
+  },
+
+  handleFinish () {
+    Dialog.alert({
+      title: '完成番茄',
+      message: '您已经完成了一个番茄工作时间中，要放弃这个番茄吗？',
+    }).then(() => {
+      this.handleStop();
+      this.setData({
+        isStart: !isStart,
+      })
+    }).catch((e) => {
+      console.log(e);
+    });
+  },
   /**
    * 画progress进度
    */
@@ -61,32 +133,30 @@ Page({
     context.draw()
   },
 
-  /**
-   * 开始progress
-   */
-  startProgress () {
+  handleStart () {
     this.setData({
-      count: 0
+      countSeconds: 0
     });
-    // 开始倒计时 定时器每1000毫秒执行一次，计数器 count+1 ,耗时 totalSeconds 绘一圈
+    this.updateSettings();
+    // 开始倒计时 定时器每1000毫秒执行一次，计数器 countSeconds+1 ,耗时 totalSeconds 绘一圈
     let countTimer = setInterval(() => {
-      let { totalSeconds, count } = this.data;
-      if (this.data.count <= totalSeconds) {
+      let { totalSeconds, countSeconds } = this.data;
+      if (this.data.countSeconds <= totalSeconds) {
         /**
          * 绘制彩色圆环进度条
          * 计算进度，完整的圆是 2 * Math.PI，那么当前进度就是：已经完成的倒计时 / 全部时间 * 2
          */
-
-        const step = this.data.count / totalSeconds * 2;
+        const step = this.data.countSeconds / totalSeconds * 2;
+        const seconds = totalSeconds - countSeconds - 1;
+        let progress_txt = this.handleNumberParse(parseInt(seconds / 60)) + ' : ' + this.handleNumberParse(seconds % 60);
         this.setData({
           progress: Object.assign({}, this.data.progress, { eAngle: (step - 0.5) * Math.PI} ),
-          count: count + 1,
-          progress_txt: totalSeconds - count - 1
-        })
+          countSeconds: countSeconds + 1,
+          progress_txt,
+        });
         this.drawCircle(this.data.progress)
       } else {
-        clearInterval(this.data.countTimer);
-        this.startProgress();
+        this.handleFinish();
       }
     }, 1000)
 

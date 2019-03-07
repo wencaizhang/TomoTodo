@@ -1,7 +1,7 @@
 {
   "pages":[
+    "pages/clock/clock",
     "pages/settings/settings",
-    "pages/index/index",
     "pages/logs/logs"
   ],
   "window":{
@@ -16,7 +16,7 @@
     "backgroundColor": "#fff",
     "list": [
       {
-        "pagePath": "pages/index/index",
+        "pagePath": "pages/clock/clock",
         "iconPath": "images/tabBar/none_time.png",
         "selectedIconPath": "images/tabBar/time.png",
         "text": "计时"
