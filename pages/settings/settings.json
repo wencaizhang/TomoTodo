@@ -1,6 +1,5 @@
 {
   "usingComponents": {
-    "van-slider": "/miniprogram_npm/vant-weapp/slider/index",
     "van-stepper": "/miniprogram_npm/vant-weapp/stepper/index"
   }
 }

@@ -1,5 +1,76 @@
 <!--pages/settings/settings.wxml-->
 
 <view class="container">
+	<view class="section panel">
+	  <text class="section_title">工作时长(分钟)</text>
+	  <view class="section_body">
+			<view class="slider-box">
+				<slider
+					bindchange="handleCangeWorkTime"
+					show-value="false"
+					min="1"
+					max="60"
+					value="{{ settings.workTime }}"
+					left-icon="cancel"
+					right-icon="success_no_circle"
+				/>
+			</view>
+			<!-- <van-stepper value="{{workTime}}" bind:change="handleCangeWorkTime" /> -->
+	  </view>
+	</view>
+
+	<view class="section panel">
+	  <text class="section_title">休息时长(分钟)</text>
+	  <view class="section_body">
+			<view class="slider-box">
+				<slider
+					bindchange="handleChangeRestTime"
+					show-value="false"
+					min="5"
+					max="60"
+					value="{{ settings.restTime }}"
+					left-icon="cancel"
+					right-icon="success_no_circle"
+				/>
+			</view>
+			<!-- <van-stepper value="{{restTime}}" bind:change="handleChangeRestTime" /> -->
+	  </view>
+	</view>
+
+	<view class="section panel">
+	  <view class="section_title">
+	  	<text>主页背景</text>
+	  </view>
+	  <view class="section_body">
+	  	<text bindtap="handleChooseImage" class="section_tip">选择背景 > </text>
+	  </view>
+	</view>
+
+	<view class="section panel">
+	  <view class="section_title">
+	  	<switch
+        class="section_check"
+        type="checkbox"
+        size="mini"
+        checked="{{ settings.ringing }}"
+        bindchange="handleSwitchRinging"
+      />
+	  	<text>启用铃声</text>
+	  </view>
+	  <!-- <view class="section_body">
+	  	<text bindtap="" class="section_tip">选择铃声 > </text>
+	  </view> -->
+	</view>
+
+  <button
+    type="primary"
+    size="{{ button.size }}"
+    loading="{{ button.loading }}"
+    plain="{{ button.plain }}"
+    disabled="{{ button.disabled }}"
+    bindtap="handleUpdate"
+  >
+    更新设置
+  </button>
 
 </view>

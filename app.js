@@ -34,6 +34,11 @@ App({
     })
   },
   globalData: {
-    userInfo: null
+    userInfo: null,
+    settings: {
+      workTime: 25,
+      restTime: 5,
+      ringing: true,
+    }
   }
 })
