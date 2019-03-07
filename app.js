@@ -36,9 +36,34 @@ App({
   globalData: {
     userInfo: null,
     settings: {
-      workTime: 0.1,
+      workTime: 25,
       restTime: 5,
       ringing: true,
     }
   }
 })
+
+/**
+ * 
+ *
+ * ,
+  "tabBar": {
+    "color": "#999999",
+    "selectedColor": "#3ba88e",
+    "backgroundColor": "#fff",
+    "list": [
+      {
+        "pagePath": "pages/clock/clock",
+        "iconPath": "images/tabBar/none_tomato.png",
+        "selectedIconPath": "images/tabBar/tomato.png",
+        "text": "计时"
+      },
+      {
+        "pagePath": "pages/settings/settings",
+        "iconPath": "images/tabBar/none_settings.png",
+        "selectedIconPath": "images/tabBar/settings.png",
+        "text": "设置"
+      }
+    ]
+  }
+ */

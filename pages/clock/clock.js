@@ -38,7 +38,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad () {
-    this.setTabBarStyle();
+    // this.setTabBarStyle();
     this.updateSettings();
     this.initTime();
     const { circle, progress } = this.data;
@@ -174,6 +174,7 @@ Page({
     });
     this.updateSettings();
     this.handleTextParse();
+    this.handleComputedProgress();
     // 开始倒计时 定时器每1000毫秒执行一次，计数器 countSeconds+1 ,耗时 totalSeconds 绘一圈
     let countTimer = setInterval(() => {
       let { totalSeconds, countSeconds } = this.data;
