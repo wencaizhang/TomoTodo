@@ -1,7 +1,6 @@
 //index.js
 //获取应用实例
 const app = getApp()
-import Dialog from '../../miniprogram_npm/vant-weapp/dialog/dialog';
 Page({
   data: {
     timer: 0,
@@ -10,21 +9,24 @@ Page({
     isStart: false,
   },
   handleClick () {
+    const self = this;
     let isStart = this.data.isStart;
 
     if (isStart) {
-      Dialog.alert({
+      wx.showModal({
         title: '放弃番茄',
-        message: '您目前正在一个番茄工作时间中，要放弃这个番茄吗？',
-        showCancelButton: true,
-      }).then(() => {
-        this.handleStop();
-        this.setData({
-          isStart: !isStart,
-        })
-      }).catch((e) => {
-        console.log(e);
-      });
+        content: '您目前正在一个番茄工作时间中，要放弃这个番茄吗？',
+        success(res) {
+          if (res.confirm) {
+            self.handleStop();
+            self.setData({
+              isStart: !isStart,
+            })
+          } else if (res.cancel) {
+            console.log('用户点击取消')
+          }
+        }
+      })
     } else {
       this.handleStart();
       this.setData({
