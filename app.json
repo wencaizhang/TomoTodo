@@ -1,5 +1,6 @@
 {
   "pages":[
+    "pages/settings/settings",
     "pages/index/index",
     "pages/logs/logs"
   ],
@@ -8,5 +9,30 @@
     "navigationBarBackgroundColor": "#fff",
     "navigationBarTitleText": "WeChat",
     "navigationBarTextStyle":"black"
+  },
+  "tabBar": {
+    "color": "#999999",
+    "selectedColor": "#3ba88e",
+    "backgroundColor": "#fff",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "iconPath": "images/tabBar/none_time.png",
+        "selectedIconPath": "images/tabBar/time.png",
+        "text": "计时"
+      },
+      {
+        "pagePath": "pages/logs/logs",
+        "iconPath": "images/tabBar/none_read.png",
+        "selectedIconPath": "images/tabBar/read.png",
+        "text": "记录"
+      },
+      {
+        "pagePath": "pages/settings/settings",
+        "iconPath": "images/tabBar/none_setting.png",
+        "selectedIconPath": "images/tabBar/setting.png",
+        "text": "设置"
+      }
+    ]
   }
 }
