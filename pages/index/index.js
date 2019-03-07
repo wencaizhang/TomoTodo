@@ -4,9 +4,29 @@ const app = getApp()
 Page({
   data: {
     timer: 0,
-    seconds: 25 * 60,
-    timeStr: '25',
+    seconds: 0,
+    timeStr: '',
     isStart: false,
+    settings: {
+      workTime: 25,
+      restTime: 5,
+      ringing: true,
+    }
+  },
+  onLoad () {
+    this.updateSettings();
+    this.initTime();
+  },
+  updateSettings () {
+    const settings = app.globalData.settings
+    this.setData({ ...settings })
+  },
+  initTime () {
+    const settings = this.data.settings;
+    this.setData({
+      timeStr: settings.workTime,
+      seconds: settings.workTime * 60
+    })
   },
   handleClick () {
     const self = this;
@@ -39,18 +59,22 @@ Page({
   handleStop () {
     let timer = this.data.timer;
     clearInterval(timer);
-    this.setData({
-      seconds: 25 * 60,
-      timeStr: '25',
-    })
+    this.initTime();
+  },
+  handleNumberParse (n) {
+    if (n < 10) {
+      return '0' + n;
+    }
+    return n;
   },
   handleStart () {
+    this.updateSettings();
     let timer = setInterval(() => {
       let seconds = this.data.seconds - 1;
       if (seconds === 0) {
         this.handleFinish();
       }
-      let timeStr = parseInt(seconds / 60) + ':' + seconds % 60
+      let timeStr = this.handleNumberParse(parseInt(seconds / 60)) + ' : ' + this.handleNumberParse(seconds % 60);
       this.setData({
         seconds,
         timeStr
