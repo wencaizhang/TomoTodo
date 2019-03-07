@@ -38,6 +38,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad () {
+    this.setTabBarStyle();
     this.updateSettings();
     this.initTime();
     const { circle, progress } = this.data;
@@ -47,9 +48,16 @@ Page({
     this.drawCircle(circle);  //绘制背景
   },
 
+  setTabBarStyle () {
+    wx.setTabBarStyle({
+      color: '#fff',
+      backgroundColor: '#34343D',
+    })
+  },
+
   updateSettings () {
     const settings = app.globalData.settings
-    this.setData({ ...settings })
+    this.setData({ settings })
   },
   initTime () {
     const settings = this.data.settings;
@@ -99,17 +107,18 @@ Page({
   },
 
   handleFinish () {
-    Dialog.alert({
+    const self = this;
+    wx.showModal({
       title: '完成番茄',
-      message: '您已经完成了一个番茄工作时间中，要放弃这个番茄吗？',
-    }).then(() => {
-      this.handleStop();
-      this.setData({
-        isStart: !isStart,
-      })
-    }).catch((e) => {
-      console.log(e);
-    });
+      content: '您已经完成了一个番茄钟',
+      success(res) {
+        if (res.confirm) {
+
+        } else if (res.cancel) {
+          console.log('用户点击取消')
+        }
+      }
+    })
   },
   /**
    * 画progress进度

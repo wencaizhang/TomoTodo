@@ -36,7 +36,7 @@ App({
   globalData: {
     userInfo: null,
     settings: {
-      workTime: 25,
+      workTime: 1,
       restTime: 5,
       ringing: true,
     }

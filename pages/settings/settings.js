@@ -21,7 +21,7 @@ Page({
     })
 
     const settings = app.globalData.settings
-    this.setData({ ...settings })
+    this.setData({ settings })
   },
   handleCangeWorkTime (e) {
     // 取值方式：原生slider 为 e.detail.value，van-stepper 为 e.detail

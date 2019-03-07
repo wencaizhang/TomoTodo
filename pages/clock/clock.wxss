@@ -40,7 +40,7 @@
 }
 
 .progress_info {
-  font-size: 35rpx;
+  font-size: 30px;
   padding-left: 16rpx;
   letter-spacing: 2rpx;
   color: white;
@@ -59,8 +59,8 @@
 }
 
 .btn.stop {
-  background-color: #f44;
-  color: #fff;
+  /* background-color: #f44; */
+  color: #f44;
   border-color: #f44;
 
   width: 80px;
